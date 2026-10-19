@@ -1,12 +1,21 @@
 Package: selSurv
-Title: Selective Inference Workflows for Penalized Cox Models
+Title: Inference after Cox-Lasso Variable Selection
 Version: 0.1.0
 Authors@R: c(
     person("Lena", "Schemet", email = "lena.schemet@uni-a.de", role = c("aut", "cre")),
     person("Sarah", "Friedrich-Welz", role = "aut"),
-    person("Andreas", "Groll", role = "ctb")
+    person("Andreas", "Groll", role = "aut")
   )
-Description: Research workflows for inference after Cox-Lasso screening. The package provides a unified interface for Cox-Lasso fitting, support-restricted refitting, split-sample inference, approximately debiased coefficient estimates, score-level bootstrap intervals, and model-based bootstrap intervals with fixed-support or re-selection workflows. The package distinguishes full-model, fixed-support, and zero-padded procedure-level targets.
+Description: Methods for inference after Cox-Lasso variable selection in
+    right-censored survival data. The package provides Cox-Lasso fitting,
+    support-restricted Cox refitting, sample splitting, approximately debiased
+    coefficient estimates, score-level bootstrap intervals, and model-based
+    bootstrap intervals with fixed-support or repeated-selection procedures.
+    The methods differ in their inferential targets and theoretical guarantees.
+    Relevant methodological investigations are presented in Schemet and
+    Friedrich-Welz (2026) <doi:10.48550/arXiv.2602.07477>, Schemet, Groll and
+    Friedrich-Welz (2026) <doi:10.48550/arXiv.2608.18893>, and Schemet and
+    Friedrich-Welz (2026) <doi:10.48550/arXiv.2608.24230>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
