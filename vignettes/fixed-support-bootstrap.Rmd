@@ -1,0 +1,66 @@
+---
+title: "Fixed-support model-based bootstrap"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Fixed-support model-based bootstrap}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+```{r smoke-data, include=FALSE}
+set.seed(2026)
+n_smoke <- 140
+p_smoke <- 6
+X_smoke <- matrix(rnorm(n_smoke * p_smoke), n_smoke, p_smoke)
+colnames(X_smoke) <- paste0("x", seq_len(p_smoke))
+beta_smoke <- c(1.0, -0.8, 0.6, 0, 0, 0)
+T_smoke <- rexp(n_smoke, rate = 0.05 * exp(drop(X_smoke %*% beta_smoke)))
+C_smoke <- rexp(n_smoke, rate = 0.025)
+time_smoke <- pmin(T_smoke, C_smoke)
+status_smoke <- as.integer(T_smoke <= C_smoke)
+library(selSurv)
+fit_smoke <- coxlasso_fit(X_smoke, time_smoke, status_smoke, lambda_choice = "1se")
+```
+
+
+The fixed-support model-based bootstrap quantifies uncertainty for the unpenalized Cox refit on the support selected in the observed data. The observed support is retained throughout bootstrap analysis.
+
+## Public interface
+
+```{r fixed, eval=FALSE}
+fixed <- coxlasso_boot(
+  fit,
+  inference = "conditional",
+  B = 500,
+  conf_level = 0.95,
+  seed = 2026
+)
+summary(fixed)
+```
+
+Here, `inference = "conditional"` means that the selected support is held fixed as the working model. It does **not** denote formal conditioning on the complete Lasso selection event.
+
+
+```{r fixed-smoke, include=FALSE}
+fixed_smoke <- coxlasso_boot(
+  fit_smoke,
+  inference = "conditional",
+  B = 3L,
+  conf_level = 0.95,
+  seed = 2026
+)
+summary(fixed_smoke)
+```
+
+## Bootstrap construction
+
+The model-based generator uses the observed selected-model Cox refit, a Breslow estimate of the cumulative baseline hazard, and an estimated censoring distribution. Bootstrap event and censoring outcomes are generated from this plug-in model, followed by an unpenalized Cox refit on the same support in every replicate.
+
+The underlying methodological paper establishes first-order validity under Cox regularity, sparse-model, and support-recovery assumptions. The software does not claim an exact finite-sample selective guarantee when support selection remains unstable.
+
+## Reporting
+
+Report the selected support, coefficient estimates, interval construction, bootstrap size `B`, tie handling, censoring model, and any convergence diagnostics together with the intervals.

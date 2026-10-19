@@ -1,0 +1,27 @@
+Package: selSurv
+Title: Selective Inference Workflows for Penalized Cox Models
+Version: 0.1.0
+Authors@R: c(
+    person("Lena", "Schemet", email = "lena.schemet@uni-a.de", role = c("aut", "cre")),
+    person("Sarah", "Friedrich-Welz", role = "aut"),
+    person("Andreas", "Groll", role = "ctb")
+  )
+Description: Research workflows for inference after Cox-Lasso screening. The package provides a unified interface for Cox-Lasso fitting, support-restricted refitting, split-sample inference, approximately debiased coefficient estimates, score-level bootstrap intervals, and model-based bootstrap intervals with fixed-support or re-selection workflows. The package distinguishes full-model, fixed-support, and zero-padded procedure-level targets.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Depends: R (>= 4.1.0)
+Imports:
+    stats,
+    utils,
+    survival,
+    glmnet,
+    MASS
+Suggests:
+    knitr,
+    Matrix,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.0

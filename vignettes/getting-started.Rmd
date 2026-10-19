@@ -1,0 +1,113 @@
+---
+title: "Getting started with selSurv"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with selSurv}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+`selSurv` separates Cox-Lasso fitting from the inferential question asked after selection. The main user-facing functions correspond to different inferential targets rather than interchangeable ways to compute the same confidence interval.
+
+## A common Cox-Lasso fit
+
+The following small example is used only to illustrate the interface.
+
+```{r data}
+set.seed(2026)
+n <- 120
+p <- 6
+X <- matrix(rnorm(n * p), nrow = n, ncol = p)
+colnames(X) <- paste0("x", seq_len(p))
+beta <- c(0.8, -0.6, 0.4, 0, 0, 0)
+T <- rexp(n, rate = 0.06 * exp(drop(X %*% beta)))
+C <- rexp(n, rate = 0.04)
+time <- pmin(T, C)
+status <- as.integer(T <= C)
+```
+
+```{r fit}
+library(selSurv)
+fit <- coxlasso_fit(X, time, status, lambda_choice = "1se")
+fit
+```
+
+
+```{r api-smoke, include=FALSE}
+db_smoke <- coxlasso_debias(fit)
+db_boot_smoke <- coxlasso_boot(
+  fit, inference = "debiased", type = c("wild", "efron"),
+  B = 3L, conf_level = 0.95, seed = 2026
+)
+fixed_smoke <- coxlasso_boot(
+  fit, inference = "conditional",
+  B = 3L, conf_level = 0.95, seed = 2026
+)
+split_smoke <- coxlasso_split(X, time, status, seed = 2026)
+reselected_smoke <- coxlasso_boot_reselect(
+  X, time, status, B = 3L, conf_level = 0.95,
+  methods = c("fixed_support", "reselect_fixed_lambda", "reselect_cv_min"),
+  seed = 2026, nfolds = 3L, standardize = TRUE
+)
+```
+
+## Choose the inferential target
+
+After fitting the Cox-Lasso, the main routes are:
+
+```{r routes, eval=FALSE}
+# Full-model coefficient target: debiased Wald inference
+db <- coxlasso_debias(fit)
+
+# Full-model coefficient target: wild bootstrap and Efron's bootstrap
+db_boot <- coxlasso_boot(
+  fit,
+  inference = "debiased",
+  type = c("wild", "efron"),
+  B = 500,
+  conf_level = 0.95,
+  seed = 2026
+)
+
+# Selected-submodel target: observed support held fixed
+fixed <- coxlasso_boot(
+  fit,
+  inference = "conditional",
+  B = 500,
+  conf_level = 0.95,
+  seed = 2026
+)
+
+# Selection and inference on disjoint samples
+split <- coxlasso_split(X, time, status, seed = 2026)
+
+# Procedure-level re-selection
+reselected <- coxlasso_boot_reselect(
+  X, time, status,
+  B = 500,
+  conf_level = 0.95,
+  methods = c("fixed_support", "reselect_fixed_lambda", "reselect_cv_min"),
+  seed = 2026
+)
+```
+
+These calls should not be interpreted as interchangeable confidence intervals. Debiased inference addresses a full-model coefficient target, fixed-support model-based bootstrap inference addresses coefficients of the selected working model, sample splitting uses a selected model obtained from an independent selection sample, and re-selection describes the repeated data-adaptive procedure.
+
+## Inspecting results
+
+```{r summaries, eval=FALSE}
+summary(db)
+summary(db_boot)
+summary(fixed)
+summary(split)
+
+rs <- summary(reselected)
+rs$diagnostics
+rs$intervals
+```
+
+For publication-scale bootstrap analyses, use substantially larger `B` than values used in package smoke tests and inspect method-specific diagnostics together with confidence intervals.

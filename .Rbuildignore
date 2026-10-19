@@ -1,0 +1,12 @@
+^check_output$
+^CITATION[.]cff$
+^examples$
+^IMPLEMENTATION_NOTES\.md$
+^logs$
+^man/coxlasso_workflows\.Rd$
+^.*\.Rproj$
+^\.Rproj\.user$
+^.*[.]sbatch$
+^SHA256SUMS[.]txt$
+^inst/development($|/)
+^inst/history($|/)

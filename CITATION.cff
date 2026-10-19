@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "Please cite the relevant methodological article(s) for the workflow used; selSurv is research software under active development."
+title: "selSurv: Selective Inference Workflows for Penalized Cox Models"
+type: software
+authors:
+  - family-names: Schemet
+    given-names: Lena
+  - family-names: Friedrich-Welz
+    given-names: Sarah
+version: 0.1.0.9016
+year: 2026
+license: MIT

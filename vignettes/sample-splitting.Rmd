@@ -1,0 +1,54 @@
+---
+title: "Sample-splitting inference after Cox-Lasso selection"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Sample-splitting inference after Cox-Lasso selection}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+```{r smoke-data, include=FALSE}
+set.seed(2026)
+n_smoke <- 140
+p_smoke <- 6
+X_smoke <- matrix(rnorm(n_smoke * p_smoke), n_smoke, p_smoke)
+colnames(X_smoke) <- paste0("x", seq_len(p_smoke))
+beta_smoke <- c(1.0, -0.8, 0.6, 0, 0, 0)
+T_smoke <- rexp(n_smoke, rate = 0.05 * exp(drop(X_smoke %*% beta_smoke)))
+C_smoke <- rexp(n_smoke, rate = 0.025)
+time_smoke <- pmin(T_smoke, C_smoke)
+status_smoke <- as.integer(T_smoke <= C_smoke)
+library(selSurv)
+fit_smoke <- coxlasso_fit(X_smoke, time_smoke, status_smoke, lambda_choice = "1se")
+```
+
+
+Sample splitting separates model selection from coefficient inference by using disjoint subsets of the observations. This avoids using the same observations for both steps, at the cost of reduced information in each part of the analysis.
+
+## Basic call
+
+```{r split, eval=FALSE}
+split <- coxlasso_split(
+  X, time, status,
+  seed = 2026
+)
+summary(split)
+```
+
+The selected support is determined from the selection sample. An unpenalized Cox model is then fitted to that support in the inference sample, where conventional Cox-model uncertainty is computed.
+
+
+```{r split-smoke, include=FALSE}
+split_smoke <- coxlasso_split(
+  X_smoke, time_smoke, status_smoke,
+  seed = 2026
+)
+summary(split_smoke)
+```
+
+## Target and interpretation
+
+The resulting coefficients correspond to the selected submodel defined by the selection sample. They should not be interpreted as the same target as debiased full-model coefficients. Results also depend on the realised split; the random seed should therefore be reported whenever reproducibility of the exact split matters.
