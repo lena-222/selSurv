@@ -1,6 +1,6 @@
 Package: selSurv
 Title: Inference after Cox-Lasso Variable Selection
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Lena", "Schemet", email = "lena.schemet@uni-a.de", role = c("aut", "cre")),
     person("Sarah", "Friedrich-Welz", role = "aut"),

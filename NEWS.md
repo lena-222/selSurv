@@ -1,6 +1,14 @@
-# selSurv 0.1.0
+# selSurv 0.1.1
 
 Initial CRAN release.
+
+- Updated the simulation-study reference to the published journal DOI.
+- Clarified public method descriptions and documentation.
+- Simplified the README while retaining development smoke tests.
+
+# selSurv 0.1.0
+
+Initial public GitHub release.
 
 - Provides Cox-Lasso screening, support-restricted Cox refitting,
   split-sample inference, approximately debiased coefficient estimates,
