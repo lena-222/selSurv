@@ -13,7 +13,7 @@ Description: Methods for inference after Cox-Lasso variable selection in
     bootstrap intervals with fixed-support or repeated-selection procedures.
     The methods differ in their inferential targets and theoretical guarantees.
     Relevant methodological investigations are presented in Schemet and
-    Friedrich-Welz (2026) <doi:10.48550/arXiv.2602.07477>, Schemet, Groll and
+    Friedrich-Welz (2026) <doi:10.1186/s12874-026-02887-0>, Schemet, Groll and
     Friedrich-Welz (2026) <doi:10.48550/arXiv.2608.18893>, and Schemet and
     Friedrich-Welz (2026) <doi:10.48550/arXiv.2608.24230>.
 License: MIT + file LICENSE

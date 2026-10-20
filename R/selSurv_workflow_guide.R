@@ -1,4 +1,4 @@
-#' Choosing an inference workflow in selSurv
+#' Choosing an inference method in selSurv
 #'
 #' @description
 #' A guide to inference after Cox-Lasso variable selection.
@@ -8,7 +8,7 @@
 #' selection is repeated during resampling.
 #'
 #' @details
-#' These workflows address different inferential questions.
+#' These methods address different inferential questions.
 #' An interval's interpretation depends on the target and the
 #' procedure used to construct it.
 #'
@@ -34,7 +34,7 @@
 #'
 #' * **Procedure-level re-selection.**
 #'   Use [coxlasso_boot_reselect()] to compare fixed-support refitting
-#'   with repeated Cox-Lasso selection. Available workflows include:
+#'   with repeated Cox-Lasso selection. Available procedures include:
 #'   - `"fixed_support"`: retain the original support;
 #'   - `"reselect_fixed_lambda"`: reselect with a fixed penalty;
 #'   - `"reselect_cv_min"`: reselect using CV-min;
@@ -51,7 +51,7 @@
 #' interface, including an option to retune the penalty. Its
 #' arguments, interval construction, and results differ from
 #' those of the recommended interfaces above. Use it when its
-#' specific workflow is needed; the functions are not aliases.
+#' specific procedure is needed; the functions are not aliases.
 #'
 #' @section Meaning of alpha and confidence-level arguments:
 #' * In [coxlasso_fit()], `alpha` is the elastic-net mixing parameter.

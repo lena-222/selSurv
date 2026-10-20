@@ -1,8 +1,8 @@
 # selSurv
 
-`selSurv` provides research workflows for inference after Cox-Lasso variable selection. The methods answer different questions; choosing an interval type alone does not determine its target.
+`selSurv` provides methods for inference after Cox-Lasso variable selection. The methods answer different questions; choosing an interval type alone does not determine its target.
 
-## Implemented workflows
+## Implemented methods
 
 Choose a method according to whether the original selected support is held fixed or selection is repeated.
 
@@ -15,7 +15,7 @@ Choose a method according to whether the original selected support is held fixed
 | `coxlasso_split()` | sample splitting for selection and inference | split-sample target |
 
 Lower-level method-specific functions remain available for compatibility and
-development, but these functions define the recommended user-facing workflow.
+development, but these functions define the recommended user-facing interface.
 
 ## Target distinction
 
@@ -25,7 +25,7 @@ development, but these functions define the recommended user-facing workflow.
 2. **Fixed-support target:** the model selected in the observed data is held fixed during bootstrap refitting. This is not exact conditioning on the selection event.
 3. **Procedure-level target:** selection and refitting are repeated in bootstrap samples. Unselected coordinates are recorded as zero, while failed fits remain missing.
 
-The procedure-level target is exposed separately through `coxlasso_boot_reselect()`, because this workflow repeats Cox-Lasso selection and refitting rather than keeping the observed selected support fixed.
+The procedure-level target is exposed separately through `coxlasso_boot_reselect()`, because this procedure repeats Cox-Lasso selection and refitting rather than keeping the observed selected support fixed.
 
 For `coxlasso_boot(..., inference = "conditional")`, the term `conditional` means that the support selected in the observed data is held fixed during bootstrap analysis. It does **not** mean formal conditioning on the complete selection event.
 
@@ -120,19 +120,10 @@ The package documentation gives each public inferential route a dedicated entry 
 
 The vignettes are organised by inferential target rather than by a single preferred method.
 
-## Development smoke tests
-
-The source tree contains executable smoke tests for the public interfaces:
-
-```r
-source("inst/examples/local_smoke_test.R")
-source("inst/examples/reselection_smoke_test.R")
-```
-
 <!-- BEGIN selSurv workflow guide -->
-## Which inference workflow should I use?
+## Which inference method should I use?
 
-`selSurv` supports several Cox-Lasso post-selection workflows with **different inferential targets**. Start with `coxlasso_fit()` and choose the next step based on the scientific question.
+`selSurv` supports several Cox-Lasso post-selection methods with **different inferential targets**. Start with `coxlasso_fit()` and choose the next step based on the scientific question.
 
 | Goal | Recommended function | Interpretation |
 | --- | --- | --- |
@@ -140,9 +131,9 @@ source("inst/examples/reselection_smoke_test.R")
 | Fixed-support model-based bootstrap | `coxlasso_boot(fit, inference = "conditional")` | Resample and refit on the **original selected support**; does not condition formally on the complete selection event |
 | Procedure-level re-selection | `coxlasso_boot_reselect(x, time, status, methods = c("fixed_support", "reselect_fixed_lambda", "reselect_cv_min"))` | Repeat the selection-and-refit procedure and inspect zero-padded coefficients, selection frequencies, support overlap and refit success |
 
-**Additional interface:** `coxlasso_boot_parametric()` remains available for its own fixed-support and retuned re-selection workflows. It is not interchangeable with the three recommended entry points and has its own argument and result conventions.
+**Additional interface:** `coxlasso_boot_parametric()` remains available for its own fixed-support and retuned re-selection procedures. It is not interchangeable with the three recommended entry points and has its own argument and result conventions.
 
-**Argument naming and penalty scope:** `alpha` is an elastic-net mixing parameter in `coxlasso_fit()` and `coxlasso_boot_reselect()` (Lasso: `alpha = 1`), but a significance level in `coxlasso_boot_parametric()` and the lower-level score-bootstrap functions. `coxlasso_split()` instead uses `penalty_alpha` and `conf_level`. The documented inferential workflows have been examined primarily with Lasso screening (`alpha = 1`); this is not a general validity guarantee. Other penalties remain available for fitting. Debiased inference requires `alpha = 1`; split-sample, model-based bootstrap, and re-selection workflows warn when other mixing parameters are used because those settings have not been assessed separately.
+**Argument naming and penalty scope:** `alpha` is an elastic-net mixing parameter in `coxlasso_fit()` and `coxlasso_boot_reselect()` (Lasso: `alpha = 1`), but a significance level in `coxlasso_boot_parametric()` and the lower-level score-bootstrap functions. `coxlasso_split()` instead uses `penalty_alpha` and `conf_level`. The documented inferential procedures have been examined primarily with Lasso screening (`alpha = 1`); this is not a general validity guarantee. Other penalties remain available for fitting. Debiased inference requires `alpha = 1`; split-sample, model-based bootstrap, and re-selection procedures warn when other mixing parameters are used because those settings have not been assessed separately.
 
 For the complete decision guide in the R help system, run `?selSurv_workflows`. Cox-Lasso selection and unpenalized Cox refitting may use different conventions for tied event times. The *Efron event-score bootstrap* resamples event-level score contributions; it is unrelated to the *Efron approximation* used in Cox partial likelihood. The debiasing score calculation still requires particular caution when event times are tied.
 <!-- END selSurv workflow guide -->

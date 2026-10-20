@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "Please cite the relevant methodological article(s) for the workflow used; selSurv is research software under active development."
+message: "Please cite the relevant methodological article(s) for the methods used; selSurv is research software under active development."
 title: "selSurv: Inference after Cox-Lasso Variable Selection"
 type: software
 authors:

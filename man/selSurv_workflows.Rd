@@ -2,7 +2,7 @@
 % Please edit documentation in R/selSurv_workflow_guide.R
 \name{selSurv_workflows}
 \alias{selSurv_workflows}
-\title{Choosing an inference workflow in selSurv}
+\title{Choosing an inference method in selSurv}
 \description{
 A guide to inference after Cox-Lasso variable selection.
 
@@ -11,7 +11,7 @@ coefficient or procedure they describe and in whether variable
 selection is repeated during resampling.
 }
 \details{
-These workflows address different inferential questions.
+These methods address different inferential questions.
 An interval's interpretation depends on the target and the
 procedure used to construct it.
 }
@@ -37,7 +37,7 @@ support is kept fixed. No conditioning on the complete
 selection event is performed.
 \item \strong{Procedure-level re-selection.}
 Use \code{\link[=coxlasso_boot_reselect]{coxlasso_boot_reselect()}} to compare fixed-support refitting
-with repeated Cox-Lasso selection. Available workflows include:
+with repeated Cox-Lasso selection. Available procedures include:
 \itemize{
 \item \code{"fixed_support"}: retain the original support;
 \item \code{"reselect_fixed_lambda"}: reselect with a fixed penalty;
@@ -59,7 +59,7 @@ need not have standard fixed-parameter coverage interpretations.
 interface, including an option to retune the penalty. Its
 arguments, interval construction, and results differ from
 those of the recommended interfaces above. Use it when its
-specific workflow is needed; the functions are not aliases.
+specific procedure is needed; the functions are not aliases.
 }
 
 \section{Meaning of alpha and confidence-level arguments}{
